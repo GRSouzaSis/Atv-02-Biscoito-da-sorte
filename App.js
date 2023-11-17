@@ -1,69 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import { Component } from "react";
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import { frases } from "./src/frases";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      imagem: require("./img/biscoito.png"),
-      frases: [
-        "Quebre o biscoito e descubra sua sorte!!",
-        "Tenha sorte!",
-        "A vida é bela!",
-        "Bons momentos estão chegando!",
-        "Acredite em você mesmo e tudo será possível.",
-        "O sucesso nasce do querer, da determinação e persistência.",
-        "Seja a mudança que você deseja ver no mundo.",
-        "O único lugar onde o sucesso vem antes do trabalho é no dicionário.",
-        "A vida é como andar de bicicleta. Para ter equilíbrio, você precisa se manter em movimento.",
-        "O importante não é vencer todos os dias, mas lutar sempre.",
-        "Nossa maior fraqueza está em desistir. O caminho mais certo de vencer é tentar mais uma vez.",
-        "Não espere por circunstâncias ideais. Elas nunca chegam.",
-      ],
-      fraseIndex: 0,
-      fraseInicial: " ",
-    };
-    this.mudarImagem = this.mudarImagem.bind(this);
-  }
-  gerarIndiceAleatorio() {
-    const novoIndice = Math.floor(Math.random() * this.state.frases.length);
-    return novoIndice !== this.state.fraseIndex
-      ? novoIndice
-      : this.gerarIndiceAleatorio();
-  }
-  mudarImagem() {
-    if (this.state.botaoPressionado) {
-      this.setState({
-        imagem: require("./img/biscoito.png"),
-        botaoPressionado: false,
-        fraseIndex: 0,
-        fraseInicial: " ",
-      });
-    } else {
-      this.setState({
-        imagem: require("./img/biscoitoQuebrado.png"),
-        fraseIndex: this.gerarIndiceAleatorio(),
-        botaoPressionado: true,
-        fraseInicial:" ",
-      });
-    }
-  }
+const App = ()=> {
 
-  render() {
+  const [quebrarBiscoito, setQuebrarBiscoito] =  useState(false)
+  const [mudarFrase, setMudarFrase] = useState(0)
+  
+  function trocarFrases (){
+    setQuebrarBiscoito(!quebrarBiscoito)
+    let tamanhoListaFrases = frases.length
+    setMudarFrase(Math.floor(Math.random() * tamanhoListaFrases))
+    
+  }
+ 
     return (
-      <View style={styles.container}>
-        <Image style={styles.imagemTamanho} source={this.state.imagem} />
-        <Text style={styles.textoGeral}>
-          {this.state.frases[this.state.fraseIndex]}
-        </Text>
-        <TouchableOpacity style={styles.botao} onPress={this.mudarImagem}>
-          <Text style={styles.textoBotao}>{this.state.botaoPressionado ? "Reiniciar" : "Quebrar Biscoito"}</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
+      <>
+        <View style={styles.container}>
+         {!quebrarBiscoito ? 
+          <Image style={styles.imagemTamanho} source={require("./img/biscoito.png")} />:(
+            <View>
+              <Image style={styles.imagemTamanho} source={require("./img/biscoitoQuebrado.png")}/>
+              <Text style={styles.textoGeral}>{frases[mudarFrase]}</Text>
+            </View>
+          )
+         
+        }
+           <TouchableOpacity style={styles.botao} onPress={trocarFrases}>
+            <Text style={styles.textoBotao}>{!quebrarBiscoito ? "Quebrar biscoito" : "Reiniciar"}</Text>
+           </TouchableOpacity>
+        </View>
+      </>
+    )
+
+  
+
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -87,6 +61,8 @@ const styles = StyleSheet.create({
     width: 175,
     alignItems: "center",
     margin: 30,
+    position: "absolute",
+    bottom: 0,
   },
   textoBotao: {
     fontSize: 20,
@@ -100,3 +76,65 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+// class App extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       imagem: require("./img/biscoito.png"),
+      // frases: [
+      //   "Quebre o biscoito e descubra sua sorte!!",
+      //   "Tenha sorte!",
+      //   "A vida é bela!",
+      //   "Bons momentos estão chegando!",
+      //   "Acredite em você mesmo e tudo será possível.",
+      //   "O sucesso nasce do querer, da determinação e persistência.",
+      //   "Seja a mudança que você deseja ver no mundo.",
+      //   "O único lugar onde o sucesso vem antes do trabalho é no dicionário.",
+      //   "A vida é como andar de bicicleta. Para ter equilíbrio, você precisa se manter em movimento.",
+      //   "O importante não é vencer todos os dias, mas lutar sempre.",
+      //   "Nossa maior fraqueza está em desistir. O caminho mais certo de vencer é tentar mais uma vez.",
+      //   "Não espere por circunstâncias ideais. Elas nunca chegam.",
+      // ],
+//       fraseIndex: 0,
+//       fraseInicial: " ",
+//     };
+//     this.mudarImagem = this.mudarImagem.bind(this);
+//   }
+//   gerarIndiceAleatorio() {
+//     const novoIndice = Math.floor(Math.random() * this.state.frases.length);
+//     return novoIndice !== this.state.fraseIndex
+//       ? novoIndice
+//       : this.gerarIndiceAleatorio();
+//   }
+//   mudarImagem() {
+//     if (this.state.botaoPressionado) {
+//       this.setState({
+//         imagem: require("./img/biscoito.png"),
+//         botaoPressionado: false,
+//         fraseIndex: 0,
+//         fraseInicial: " ",
+//       });
+//     } else {
+//       this.setState({
+//         imagem: require("./img/biscoitoQuebrado.png"),
+//         fraseIndex: this.gerarIndiceAleatorio(),
+//         botaoPressionado: true,
+//         fraseInicial:" ",
+//       });
+//     }
+//   }
+
+//   render() {
+//     return (
+//       <View style={styles.container}>
+//         <Image style={styles.imagemTamanho} source={this.state.imagem} />
+//         <Text style={styles.textoGeral}>
+//           {this.state.frases[this.state.fraseIndex]}
+//         </Text>
+//         <TouchableOpacity style={styles.botao} onPress={this.mudarImagem}>
+//           <Text style={styles.textoBotao}>{this.state.botaoPressionado ? "Reiniciar" : "Quebrar Biscoito"}</Text>
+//         </TouchableOpacity>
+//       </View>
+//     );
+//   }
+// }
